@@ -5,7 +5,7 @@
   "main": "dist/app/server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --exec ts-node app/server.ts",
+    "dev": "tsx watch app/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -21,8 +21,7 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.6.0",
-    "nodemon": "^3.1.14",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^6.0.3"
   },
   "author": "Abhishek Sharma",
