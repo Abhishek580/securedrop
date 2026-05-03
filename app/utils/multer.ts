@@ -7,7 +7,6 @@ import config from "../config.js";
 
 const uploadDir = config.fileUploadPath 
 
-console.log('path is ', uploadDir);
 // Ensuring that the directory exists at startup
 if (!fs.existsSync(uploadDir)) {
   
@@ -23,7 +22,6 @@ const storage = multer.diskStorage({
     // Standardizing the filename for the "Vault"
     const uniqueId = randomUUID();
     const ext = path.extname(file.originalname);
-console.log('running');
 
     // Using a template literal for cleanliness
     cb(null, `vault-${uniqueId}${ext}`);
