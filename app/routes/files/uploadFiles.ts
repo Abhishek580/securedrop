@@ -1,33 +1,29 @@
-import type { Request, Response, NextFunction } from "express";
-import mappers from "../../mappers/files/uploadFiles.js";
-const addFiles = async function (
-  req: Request,
-  res: Response,
-): Promise<Response | void> {
-  try {
-    const files =
-      (req.files as Express.Multer.File[]) || (req.file ? [req.file] : []);
+import type { Request, Response } from "express";
+import core from "../../core/files.js";
 
-    if (!files || files.length === 0) {
-      return res.status(400).json({
-        message: "No files uploaded",
-      });
+export const uploadFiles = async (req: Request, res: Response) => {
+  try {
+    const file =req.file
+      // (req.files as Express.Multer.File[]) || (req.file ? [req.file] : []);
+    // console.log("files: ", file);
+
+    if (!file) {
+      console.log('no file');
+      
+      return res.status(400).json({ message: "No file uploaded" });
     }
 
-    // Map response 
-    const uploadedFiles = mappers.cleanOutput(files);
+    const key = await core.uploadToR2(file);
+    const savedFile = await core.saveFileMetadata(file, key);
 
-    return res.status(200).json({
-      message: "Files uploaded successfully",
-      count: uploadedFiles.length,
-      files: uploadedFiles,
+    return res.status(201).json({
+      message: "File uploaded successfully",
+      fileId: savedFile.id,
     });
-  } catch (err: any) {
+  } catch (error) {
+    console.error("Upload Error:", error);
     return res.status(500).json({
-      message: "Error adding files",
-      error: err.message,
+      message: "File upload failed",
     });
   }
 };
-
-export default addFiles;

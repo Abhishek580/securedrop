@@ -17,4 +17,5 @@ config.r2Creds= {
 };
 
 config.dbUrl = ENV.DATABASE_URL
+config.fileSizeLimit = ENV.FILE_SIZE_LIMIT 
 export default config;
