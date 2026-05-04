@@ -1,6 +1,20 @@
-const config: any = {}
-import constants from "./constants.js"
+const config: any = {};
+import constants from "./constants.js";
+import dotenv from "dotenv";
 
-config.fileUploadPath = constants.FILE_UPLOAD_PATH
+dotenv.config();
 
+// console.log(process.env);
+const ENV = process.env;
+
+config.fileUploadPath = constants.FILE_UPLOAD_PATH;
+
+config.r2Creds= {
+  accountId: ENV.R2_ACCOUNT_ID,
+  accessKeyId: ENV.R2_ACCESS_KEY,
+  secretAccessKey: ENV.R2_SECRET_KEY,
+  bucketName:ENV.R2_BUCKET_NAME
+};
+
+config.dbUrl = ENV.DATABASE_URL
 export default config;
