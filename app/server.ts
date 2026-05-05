@@ -2,14 +2,14 @@ import express from "express";
 import {uploadFiles} from "./routes/files/uploadFiles.js";
 import getFiles from "./routes/files/getFiles.js";
 import deleteFiles from "./routes/files/deleteFiles.js";
-import { multerUpload } from "./utils/multer.js";
+import { handleUpload } from "./middlewares/multer.js";
 
 const app = express();
 const PORT = 5001;
 
 app.use(express.json());
 
-app.post("/api/files",multerUpload.single("file"), uploadFiles);
+app.post("/api/files",handleUpload, uploadFiles);
 app.get("/api/files", getFiles);
 app.delete("/api/files", deleteFiles);
 

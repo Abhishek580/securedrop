@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,30 +6,58 @@ datasource db {
   provider = "postgresql"
 }
 
+model Bundle {
+  id        String   @id
+  createdAt DateTime @default(now())
+
+  // Optional future use
+  name      String?
+  isDeleted Boolean  @default(false)
+
+  files      File[]
+  shareLinks ShareLink[]
+}
+
 model File {
   id           String   @id @default(uuid())
   originalName String
-  mimeType     String?
-  size         Int?
-  storageKey   String
-  isDeleted    Boolean  @default(false)
-  createdAt    DateTime @default(now())
+  mimeType     String
+  size         Int
 
-  shareLinks   ShareLink[]
+  storageKey String?   // null until upload completes
+  status     FileStatus
+
+  bundleId String
+  bundle   Bundle @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+
+  isDeleted Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ShareLink {
-  id             String   @id @default(uuid())
-  fileId         String
-  token          String   @unique
-  expiresAt      DateTime
-  password       String?
-  downloadCount  Int      @default(0)
-  maxDownloads   Int?
-  isActive       Boolean  @default(true)
-  createdAt      DateTime @default(now())
+  id        String   @id @default(uuid())
+  bundleId  String
+  token     String   @unique
 
-  file File @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  expiresAt     DateTime?
+  password      String?
+  downloadCount Int      @default(0)
+  maxDownloads  Int?
+  isActive      Boolean  @default(true)
 
+  createdAt DateTime @default(now())
+
+  bundle Bundle @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+
+  @@index([bundleId])
   @@index([expiresAt])
+}
+
+enum FileStatus {
+  PENDING
+  UPLOADING
+  COMPLETED
+  FAILED
 }

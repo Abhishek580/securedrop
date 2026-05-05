@@ -1,29 +1,37 @@
 import type { Request, Response } from "express";
-import core from "../../core/files.js";
+import {
+  createBundle,
+  insertFileMetaData,
+  addFilesToQueue,
+} from "../../core/files.js";
+import { randomUUID } from "node:crypto";
 
 export const uploadFiles = async (req: Request, res: Response) => {
   try {
-    const file =req.file
-      // (req.files as Express.Multer.File[]) || (req.file ? [req.file] : []);
-    // console.log("files: ", file);
+    const files = req.files as Express.Multer.File[] | undefined;
 
-    if (!file) {
-      console.log('no file');
-      
-      return res.status(400).json({ message: "No file uploaded" });
+    if (!files || files.length === 0) {
+      return res.status(400).json({ message: "No files uploaded" });
     }
+    const bundleId = randomUUID();
+    await createBundle(bundleId);
 
-    const key = await core.uploadToR2(file);
-    const savedFile = await core.saveFileMetadata(file, key);
+    await Promise.all(
+      files.map(async (file) => {
+        // Create file entries (PENDING)
+        const dbFile = await insertFileMetaData(file, bundleId);
+        //Push files to queue ( include fileId)
+        await addFilesToQueue(file, bundleId, dbFile);
+      }),
+    );
+    res.json({
+      bundleId,
+      message: "Upload started",
+    });
+  } catch (err) {
+    console.error(err);
+    console.error("Upload Error:", err);
 
-    return res.status(201).json({
-      message: "File uploaded successfully",
-      fileId: savedFile.id,
-    });
-  } catch (error) {
-    console.error("Upload Error:", error);
-    return res.status(500).json({
-      message: "File upload failed",
-    });
+    res.status(500).json({ message: "Upload failed" });
   }
 };
