@@ -1,6 +1,6 @@
 import { Worker } from "bullmq";
 import { redisConnection } from "../core/adapters/redis.js";
-import { handleFileUpload } from "./fileHandler.js";
+import { handleFileUpload } from "../core/files.js";
 
 const worker = new Worker(
   "file-upload",
