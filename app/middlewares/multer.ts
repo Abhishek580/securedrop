@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import type { Request, Response, NextFunction } from "express";
-import config from "../config.js";
+import config from "../shared/config.js";
 
 const uploadDir = config.fileUploadPath;
 
@@ -52,7 +52,7 @@ const upload = multer({
     fileSize: 50 * 1024 * 1024, // 50MB
     files: 100,
   },
-}).array("files", 2);
+}).array("files", 50);
 
 // 👇 clean middleware (your style)
 export const handleUpload = (

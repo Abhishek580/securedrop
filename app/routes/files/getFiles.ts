@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import mappers from "../../mappers/files/getFiles.js";
+// import { testUpload } from "../../core/adapters/test.js";
 
 const getFiles = async (
   req: Request,
@@ -14,6 +15,7 @@ const getFiles = async (
       });
     }
 
+    // testUpload();
     res.status(200).json({
       message: "Files fetched successfully",
       count: fileDetails.length,

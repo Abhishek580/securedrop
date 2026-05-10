@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "./app",
+    "rootDir": ".",
     "outDir": "./dist",
     "module": "nodenext",
     "moduleResolution": "nodenext",
@@ -18,5 +18,5 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": ["app/**/*"]
+  "include": ["app/**/*", "infrastructure", "app/workers", "app/shared/constants.ts", "app/shared/config.ts", "schedulers/registerRepeatableJobs.ts", "schedulers/scheduler.ts", "app/mappers", "XT_app/core/f.js"]
 }
