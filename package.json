@@ -1,0 +1,42 @@
+{
+  "name": "securedrop",
+  "version": "1.0.0",
+  "description": "SecureDrop is a robust, production-ready REST API designed for teams that need to share large sensitive files without relying on permanent cloud storage or unencrypted email attachments",
+  "main": "dist/app/server.js",
+  "type": "module",
+  "scripts": {
+    "postinstall": "prisma generate",
+    "dev": "tsx watch app/server.ts",
+    "worker": "tsx watch app/workers/worker.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1041.0",
+    "@aws-sdk/s3-request-presigner": "^3.1043.0",
+    "@google/generative-ai": "^0.24.1",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "axios": "^1.14.0",
+    "bullmq": "^5.76.5",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "ioredis": "^5.10.1",
+    "joi": "^18.1.2",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.1.1",
+    "pg": "^8.20.0",
+    "winston": "^3.19.0",
+    "winston-daily-rotate-file": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.1.0",
+    "@types/node": "^25.6.0",
+    "prisma": "^7.8.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  },
+  "author": "Abhishek Sharma",
+  "license": "ISC"
+}

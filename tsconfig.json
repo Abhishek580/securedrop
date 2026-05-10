@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./dist",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "esnext",
+    "types": ["node"],
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true
+  },
+  "include": [
+    "app/**/*",
+    "infrastructure",
+    "app/workers",
+    "app/shared/constants.ts",
+    "app/shared/config.ts",
+    "schedulers/registerRepeatableJobs.ts",
+    "schedulers/scheduler.ts",
+    "app/mappers",
+    "XT_app/core/f.js"
+  ]
+}

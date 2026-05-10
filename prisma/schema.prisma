@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Bundle {
+  id        String   @id
+  createdAt DateTime @default(now())
+
+  name      String?
+
+  status    BundleStatus @default(ACTIVE)
+  expiresAt DateTime?
+
+  files      File[]
+  shareLinks ShareLink[]
+
+  @@index([status])
+  @@index([expiresAt])
+}
+
+model File {
+  id           String   @id @default(uuid())
+  originalName String
+  mimeType     String
+  size         Int
+
+  storageKey String? // R2 key
+  status     FileStatus
+
+  expiresAt DateTime?
+  deletedAt DateTime?
+
+  bundleId String
+  bundle   Bundle @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([expiresAt])
+}
+
+model ShareLink {
+  id        String   @id @default(uuid())
+  bundleId  String
+  token     String   @unique
+
+  expiresAt     DateTime?
+  password      String?
+  downloadCount Int      @default(0)
+  maxDownloads  Int?
+  isActive      Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+
+  bundle Bundle @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+
+  @@index([bundleId])
+  @@index([expiresAt])
+}
+
+model StorageUsage {
+  id                    String @id @default(cuid())
+
+  totalUsedBytes        BigInt @default(0)
+
+  limitBytes            BigInt?
+  warningThresholdBytes BigInt?
+
+  mode                  StorageMode @default(OFF)
+
+  updatedAt DateTime @updatedAt
+}
+
+enum FileStatus {
+  PENDING
+  UPLOADING
+  COMPLETED
+  FAILED
+
+  EXPIRED   // TTL passed
+  DELETED   // manually deleted
+}
+
+enum BundleStatus {
+  ACTIVE
+  EXPIRED
+  DELETED
+}
+
+enum StorageMode {
+  OFF
+  WARN_ONLY
+  ENFORCED
+}
