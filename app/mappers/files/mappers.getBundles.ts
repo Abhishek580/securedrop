@@ -1,4 +1,4 @@
-import type {  getBundleData } from '../../core/files.js'
+import type { getBundleData } from '../../core/files.js'
 // import { r2Client } from '../../core/infra/storage/r2Client.js'
 // import { GetObjectCommand } from '@aws-sdk/client-s3'
 // import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
@@ -75,31 +75,32 @@ export interface MapFileResponse {
 
 // Define a simple interface for what a "File" looks like to this mapper
 export interface InputFile {
-  id: string;
-  status: string;
-  storageKey?: string | null;
-  originalName: string | null;
-  mimeType: string | null;
-  size: number;
-  createdAt: Date;
+  id: string
+  status: string
+  storageKey?: string | null
+  originalName: string | null
+  mimeType: string | null
+  size: number
+  createdAt: Date
 }
 
 // Your mapper is now "Pure" - no imports from core!
 export const formatFileResponse = async (files: InputFile[]): Promise<MapFileResponse> => {
-  let completedFiles = 0;
-  let failedFiles = 0;
-  let pendingFiles = 0;
-  const storageKeys: StorageKey[] = [];
+  let completedFiles = 0
+  let failedFiles = 0
+  let pendingFiles = 0
+  const storageKeys: StorageKey[] = []
 
   const fileData = files.map((file) => {
     // Logic & Counter updates
-    if (file.status === 'DELETED') { // Adjust to 'COMPLETED' if needed
-      completedFiles++;
-      if (file.storageKey) storageKeys.push({ key: file.storageKey, fileId: file.id });
+    if (file.status === 'DELETED') {
+      // Adjust to 'COMPLETED' if needed
+      completedFiles++
+      if (file.storageKey) storageKeys.push({ key: file.storageKey, fileId: file.id })
     } else if (file.status === 'FAILED') {
-      failedFiles++;
+      failedFiles++
     } else {
-      pendingFiles++;
+      pendingFiles++
     }
 
     return {
@@ -109,12 +110,12 @@ export const formatFileResponse = async (files: InputFile[]): Promise<MapFileRes
       size: file.size,
       status: file.status,
       createdAt: file.createdAt
-    };
-  });
+    }
+  })
 
   return {
     fileData,
     aggregations: { completedFiles, failedFiles, pendingFiles },
     storageKeys
-  };
-};
+  }
+}

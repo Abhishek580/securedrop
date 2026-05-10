@@ -1,4 +1,4 @@
-import { Queue, type QueueOptions } from 'bullmq';
+import { Queue, type QueueOptions } from 'bullmq'
 import { redisConnection } from '../cache/redis.js'
 
 const defaultOptions: QueueOptions = {

@@ -9,16 +9,13 @@ import { GetObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 const files: any = {}
 
-
 export const createBundle = async function (bundleId: string) {
   await prismaClient.bundle.create({
     data: { id: bundleId }
   })
-  
 }
 
 export const insertFileMetaData = async function (file: any, bundleId: string) {
-  
   return prismaClient.file.create({
     data: {
       originalName: file.originalname,
@@ -34,26 +31,26 @@ export const insertFileMetaData = async function (file: any, bundleId: string) {
 // export interface DbFiles {
 //   id: string
 // }
-export const insertBulkFileMetaData = async (filesData: any)=> {
+export const insertBulkFileMetaData = async (filesData: any) => {
   // 1. Prepare the data with pre-generated UUIDs
-  
+
   // 2. Perform the Bulk Insert
-   return prismaClient.file.createMany({
+  return prismaClient.file.createMany({
     data: filesData,
-    skipDuplicates: true,
-  });
+    skipDuplicates: true
+  })
 
   // // 3. Return the data (including the IDs) to the controller
   // return filesData;
-};
+}
 export const addFilesToQueueBulk = async (
-  files: any, 
-  bundleId: string, 
+  files: any,
+  bundleId: string,
   dbFiles: { id: string }[]
 ) => {
   // 1. Map your individual file data into an array of Job objects
   const jobs = dbFiles.map((dbFile, index) => {
-    const file = files[index];
+    const file = files[index]
 
     return {
       name: 'upload-file',
@@ -74,12 +71,12 @@ export const addFilesToQueueBulk = async (
         removeOnComplete: true,
         removeOnFail: false // keeping failed jobs in queue for debugging as requested
       }
-    };
-  });
+    }
+  })
 
   // 2. Add all jobs to the queue in a single network round-trip to Redis
-  return await fileQueue.addBulk(jobs);
-};
+  return await fileQueue.addBulk(jobs)
+}
 
 export async function handleFileUpload(job: any) {
   const { filePath, fileName, mimeType, bundleId, fileId } = job.data

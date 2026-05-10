@@ -1,12 +1,12 @@
 export interface BundleInput {
-  id: string;
-  createdAt: Date;
+  id: string
+  createdAt: Date
   _count: {
-    files: number;
-  };
+    files: number
+  }
   files: {
-    status: string;
-  }[];
+    status: string
+  }[]
 }
 
 export const formatBundleResponse = (bundles: BundleInput[]) => {

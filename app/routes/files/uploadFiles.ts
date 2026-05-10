@@ -52,7 +52,7 @@ export const uploadFiles = async (req: Request, res: Response) => {
 
     // 2. Batch Insert: One DB call instead of 100
     const dbFiles = await insertBulkFileMetaData(filesData)
-addFilesToQueueBulk(files, bundleId, filesData)
+    addFilesToQueueBulk(files, bundleId, filesData)
     // 3. Batch Queue: Most queue systems (like BullMQ) support addBulk
     // If your addFilesToQueue doesn't support bulk, Promise.all is okay here
     // because queue connections (Redis) are much faster than DB writes.

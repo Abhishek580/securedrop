@@ -18,5 +18,15 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": ["app/**/*", "infrastructure", "app/workers", "app/shared/constants.ts", "app/shared/config.ts", "schedulers/registerRepeatableJobs.ts", "schedulers/scheduler.ts", "app/mappers", "XT_app/core/f.js"]
+  "include": [
+    "app/**/*",
+    "infrastructure",
+    "app/workers",
+    "app/shared/constants.ts",
+    "app/shared/config.ts",
+    "schedulers/registerRepeatableJobs.ts",
+    "schedulers/scheduler.ts",
+    "app/mappers",
+    "XT_app/core/f.js"
+  ]
 }
